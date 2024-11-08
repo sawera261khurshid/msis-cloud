@@ -1,38 +1,60 @@
-version: '3.3'
-services:  
+services:
   postgres:
     platform: 'linux/amd64'
     image: postgres:latest
-    container_name: codewithmuh-backend-postgres-local
+    container_name: msiscloud-backend-postgres-local
     environment:
-      - POSTGRES_USER=postgres3
-      - POSTGRES_PASSWORD=postgres3
-      - POSTGRES_DB=postgres3
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
     ports:
-      - '5437:5432'
+      - '5432:5432'
     volumes:
-      - codewithmuh-backend-postgres-local:/var/lib/postgresql/data/
+      - msiscloud-backend-postgres-local:/var/lib/postgresql/data/
 
   backend:
     platform: 'linux/amd64'
-    image: codewithmuh-backend-django:local
-    container_name: codewithmuh-backend-django-local
+    image: msiscloud-backend-django:local
+    container_name: msiscloud-backend-django-local
+    # build:
+    #   context: ../../
+    #   dockerfile: ./msis-cloud/build-process/msiscloud-backend/docker-backend-django/Dockerfile
+    # build:
+    #   context: .
+    #   dockerfile: ./msiscloud-backend/docker-backend-django/Dockerfile
     build:
-      context: ../../
-      dockerfile: ./build-process/codewithmuh-backend/docker-backend-django/Dockerfile
+      context: /Users/sawerakhurshid/Desktop/source_codes/msis-cloud/
+      dockerfile: build-process/msiscloud-backend/docker-backend-django/Dockerfile
+
       args:
         Production: 'False'
     volumes:
-      - ../../:/home/codewithmuh-backend
+      - /Users/sawerakhurshid/Desktop/source_codes/msis-cloud:/home/msiscloud-backend  # Update this path if necessary
     ports:
-      - '8090:8090'
+      - '8091:8080'
+    # env_file:
+    #   - ./local.msiscloud-backend.env  # Make sure the path is correct
+
     env_file:
-      - ./local.codewithmuh-backend.env
-    command: python manage.py runserver 0.0.0.0:8090
+      - /Users/sawerakhurshid/Desktop/source_codes/msis-cloud/build-process/local.msiscloud-backend.env
+        # - /Users/sawerakhurshid/Desktop/source_codes/msis-cloud/backend/cloud_project/settings.py 
+    environment:
+      - APP_ENVIRONMENT=Local 
+
+    command: python manage.py runserver 0.0.0.0:8080
     depends_on:
       - postgres
+      - mqtt  # Add mqtt as a dependency for the backend
+
+  mqtt:
+    image: eclipse-mosquitto
+    container_name: mqtt_sf
+    ports:
+      - '1884:1883'
+    restart: unless-stopped
+    volumes:
+      # - mqtt_configs/no_auth_websocket.conf:/mosquitto/config/mosquitto.conf 
+      - /Users/sawerakhurshid/Desktop/source_codes/msis-cloud/build-process/msiscloud-backend/docker-backend-django/mqtt_configs/no_auth_websocket.conf:/mosquitto/config/mosquitto-no-auth.conf
 
 volumes:
-  codewithmuh-backend-postgres-local:
-  esdata:
-
+  msiscloud-backend-postgres-local:

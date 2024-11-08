@@ -1,0 +1,9 @@
+Django
+djangorestframework
+django-cors-headers
+djangorestframework-simplejwt
+drf_yasg
+paho-mqtt
+psycopg2-binary
+psycopg
+whitenoise

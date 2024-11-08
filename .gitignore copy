@@ -1,0 +1,51 @@
+
+**/__pycache__/*
+
+# Ignore macOS system files
+.DS_Store
+.yarn
+
+# Ignore Node.js dependencies
+node_modules/
+packages/*/node_modules/
+packages/*/packages/*/node_modules/
+
+# Ignore Yarn's lock files
+yarn.lock
+packages/*/yarn.lock
+
+# Ignore generated build output
+packages/web/.next/
+packages/mobile/MyApp/build/
+packages/mobile/MyApp/ios/build/
+packages/mobile/MyApp/android/app/build/
+
+# Ignore environment variables
+packages/web/.env
+packages/mobile/MyApp/.env
+
+# Ignore logs and debugging files
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ignore IDE and editor specific files
+.vscode/
+.idea/
+*.iml
+
+# Ignore test coverage reports
+coverage/
+
+# Ignore any local configuration specific to your machine or environment
+.env.local
+
+# Ignore any other build or runtime output that should not be committed
+
+
+.next/*
+
+.next/build-manifest
+.next/cache
+frontend/.next
